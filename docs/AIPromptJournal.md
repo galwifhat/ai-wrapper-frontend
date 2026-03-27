@@ -245,9 +245,9 @@ _no need to prompt this_
 
 **AI Response Summary:**
 
-```
-<img src="/public/bestpractices.png" alt="Best Practices Summary" width="500"/>
-```
+
+![Best Practices Summary](/public/bestpractices.png)
+
 
 **How it helped:**
 
