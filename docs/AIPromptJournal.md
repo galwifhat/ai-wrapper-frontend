@@ -246,7 +246,7 @@ _no need to prompt this_
 **AI Response Summary:**
 
 ```
-![Best Practices Summary](/best-practices.png)
+[Best Practices Summary](/bestpractices.png)
 ```
 
 **How it helped:**
