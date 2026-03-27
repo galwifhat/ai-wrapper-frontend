@@ -1,0 +1,128 @@
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Black & White Theme */
+    --background: #ffffff;
+    --foreground: #333333;
+
+    --card: #ffffff;
+    --card-foreground: #333333;
+
+    --popover: #ffffff;
+    --popover-foreground: #333333;
+
+    --primary: #333333;
+    --primary-foreground: #f4f4f4;
+
+    --secondary: #f4f4f4;
+    --secondary-foreground: #333333;
+
+    --muted: #eaeaea;
+    --muted-foreground: #848484;
+
+    --accent: #c1c1c1;
+    --accent-foreground: #333333;
+
+    --destructive: #ff4444;
+    --destructive-foreground: #ffffff;
+
+    --border: #eaeaea;
+    --input: #f4f4f4;
+    --ring: #c1c1c1;
+
+    --radius: 0.75rem;
+
+    /* Sidebar */
+    --sidebar: #f4f4f4;
+    --sidebar-foreground: #333333;
+    --sidebar-primary: #333333;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #eaeaea;
+    --sidebar-accent-foreground: #333333;
+    --sidebar-border: #eaeaea;
+    --sidebar-ring: #c1c1c1;
+  }
+
+  .dark {
+    --background: #333333;
+    --foreground: #f4f4f4;
+
+    --card: #333333;
+    --card-foreground: #f4f4f4;
+
+    --popover: #333333;
+    --popover-foreground: #f4f4f4;
+
+    --primary: #f4f4f4;
+    --primary-foreground: #333333;
+
+    --secondary: #848484;
+    --secondary-foreground: #f4f4f4;
+
+    --muted: #848484;
+    --muted-foreground: #c1c1c1;
+
+    --accent: #c1c1c1;
+    --accent-foreground: #333333;
+
+    --border: #848484;
+    --input: #848484;
+    --ring: #c1c1c1;
+
+    --sidebar: #2a2a2a;
+    --sidebar-foreground: #f4f4f4;
+    --sidebar-primary: #f4f4f4;
+    --sidebar-primary-foreground: #333333;
+    --sidebar-accent: #3a3a3a;
+    --sidebar-accent-foreground: #f4f4f4;
+    --sidebar-border: #3a3a3a;
+    --sidebar-ring: #c1c1c1;
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans, "Geist Variable", sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    height: 100%;
+  }
+
+  #root {
+    height: 100vh;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ring);
+}

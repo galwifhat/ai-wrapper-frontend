@@ -1,0 +1,1370 @@
+
+====================================================
+FILE: ./.env
+====================================================
+VITE_API_BASE_URL=http://127.0.0.1:5000
+
+====================================================
+FILE: ./.gitignore
+====================================================
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+====================================================
+FILE: ./AIPromptJournal.md
+====================================================
+### Phase 1: Discovery
+
+#### Prompt #1
+
+**Prompt used:**
+```What is an API wrapper and what problems does it solve?```
+
+**AI Response Summary:**
+
+```claude
+An API wrapper is a layer of code that sits between your application and an external API, abstracting away the raw HTTP communication into cleaner, more convenient function calls native to your programming language.
+Instead of writing this every time you want to make a request:
+```
+
+```
+import requests
+
+response = requests.post(
+"https://api.example.com/v1/messages",
+headers={"Authorization": "Bearer sk-...", "Content-Type": "application/json"},
+json={"model": "gpt-4", "messages": [{"role": "user", "content": "Hello"}]}
+)
+data = response.json()
+`A wrapper lets you write this:`
+client = ExampleClient(api_key="sk-...")
+message = client.messages.create(model="gpt-4", content="Hello")
+```
+Problems It Solves
+```
+1. Reduces Boilerplate
+Raw API calls require repetitive setup — headers, base URLs, serialization, deserialization. A wrapper does all of that once, so every call in your codebase stays concise.
+2. Handles Errors Gracefully
+Instead of manually checking HTTP status codes (400, 401, 429, 500…), a wrapper maps these to meaningful exceptions like AuthenticationError or RateLimitError that you can catch and handle clearly.
+3. Abstracts Away Protocol Details
+You don't need to know whether the API uses REST, GraphQL, or WebSockets. You just call a method. The wrapper handles the transport.
+4. Manages Authentication
+Attaching API keys or tokens to every request is error-prone. A wrapper handles credential injection automatically once at initialization.
+5. Provides Type Safety & Autocompletion
+Well-built wrappers ship with typed return objects, so your IDE can autocomplete fields and catch mistakes before runtime.
+6. Centralizes Retry & Rate-Limit Logic
+When an API returns a 429 Too Many Requests, you want to back off and retry. A wrapper handles this in one place rather than duplicating that logic across your codebase.
+7. Shields You from API Changes
+If the API changes an endpoint URL or parameter name, you update the wrapper — not every call site in your application.
+
+A Simple Mental Model
+Think of a raw API like driving a car with a manual gear box, clutch, and no power steering. An API wrapper is the automatic transmission with cruise control — the engine underneath is the same, but the driving experience is dramatically simpler. You trade some low-level control for a lot of convenience.
+```
+
+**How it helped:**
+
+```
+Understand that there are better ways to handle api calls
+```
+
+**Challenges:**
+
+```
+None from this prompt
+```
+
+#### Prompt #2
+
+**Prompt used:**
+
+```markdown
+What are the prerequisites for building an AI wrapper for OpenRouter?
+```
+
+**AI Response Summary:**
+
+```
+Prerequisites for Building an AI Wrapper for OpenRouter
+1. An OpenRouter Account & API Key
+
+Sign up at openrouter.ai
+Generate an API key from your dashboard
+Add credits (OpenRouter is pay-per-use, though many models have free tiers)
+
+
+2. Understanding the OpenRouter API
+OpenRouter exposes an OpenAI-compatible REST API, so if you know the OpenAI API shape, you're mostly already there. Key things to know:
+
+Base URL: https://openrouter.ai/api/v1
+Auth header: Authorization: Bearer <your-api-key>
+Core endpoint: POST /chat/completions
+Model routing: You pass a model string like "anthropic/claude-3.5-sonnet" or "google/gemini-pro" and OpenRouter routes it
+
+
+3. Programming Language Fundamentals
+Pick your language — the concepts are the same. You'll need comfort with:
+ConceptWhy It MattersHTTP requestsMaking POST calls to the APIJSONSerializing requests, parsing responsesAsync/awaitHandling streaming and non-blocking callsClasses / modulesStructuring your wrapper cleanlyError handlingCatching network and API errors
+
+4. HTTP Client Knowledge
+You need a library to make HTTP calls in your chosen language:
+
+Python → httpx (preferred for async) or requests
+JavaScript/Node → fetch (native) or axios
+Go → net/http
+Rust → reqwest
+
+
+5. Core API Concepts to Understand
+Request structure:
+```
+
+```
+{
+  "model": "anthropic/claude-3.5-sonnet",
+  "messages": [
+    { "role": "system", "content": "You are a helpful assistant." },
+    { "role": "user", "content": "Hello!" }
+  ],
+  "temperature": 0.7,
+  "max_tokens": 1000
+}
+```
+
+Response structure:
+
+```
+{
+  "id": "gen-abc123",
+  "model": "anthropic/claude-3.5-sonnet",
+  "choices": [
+    {
+      "message": { "role": "assistant", "content": "Hi there!" },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": { "prompt_tokens": 20, "completion_tokens": 10 }
+}
+```
+```
+**Streaming:** OpenRouter supports Server-Sent Events (SSE) — you'll need to handle chunked responses if you want real-time output.
+```
+---
+```
+### 6. **Good-to-Have Knowledge**
+
+- **Retry logic** — handling `429 Rate Limited` and `5xx` server errors with exponential backoff
+- **Environment variables** — never hardcode API keys; use `.env` files or a secrets manager
+- **Unit testing** — mocking HTTP responses so your wrapper is testable without live API calls
+- **OpenAI SDK familiarity** — since OpenRouter mirrors the OpenAI spec, reading the OpenAI docs is directly useful
+
+---
+```
+### Quick Readiness Checklist
+
+```
+✅ OpenRouter account + funded API key
+✅ Comfortable with HTTP + JSON in your language
+✅ Know how to read and write async code
+✅ Understand the chat completions request/response shape
+✅ Know how to store secrets safely
+✅ (Bonus) Familiar with streaming / SSE
+```
+
+**How it helped:**
+
+```
+It helped me understand that to access some of these services, you need to pay.
+Also, free models do exist.
+
+```
+
+**Challenges:**
+
+```
+I do not want to pay for these services.
+I am not too familiar with streaming/sse
+```
+
+#### Prompt #3
+
+**Prompt used:**
+```Show me 5 real-world applications that use API wrappers for AI services?```
+
+
+**AI Response Summary:**
+
+```
+5 Real-World Applications Using AI API Wrappers
+
+1. 🧑‍💻 Cursor (Code Editor)
+Wraps models like GPT-4 and Claude via their APIs to power in-editor code completion, refactoring, and chat. The wrapper handles context injection (your open files, cursor position) before every API call — something the raw API knows nothing about.
+
+2. 📝 Notion AI
+Sits on top of OpenAI's API with a wrapper that packages the user's page content, selected text, and intent (summarise, improve, translate) into structured prompts — then formats the response back into Notion's block-based document structure.
+
+3. 🎧 Intercom Fin (Customer Support Bot)
+Wraps LLM APIs and layers on business logic — pulling from a company's knowledge base, enforcing tone rules, and routing unanswered questions to human agents. The wrapper is what connects raw AI output to real support workflows.
+
+4. 🔍 Perplexity AI
+Wraps multiple LLMs alongside a web search pipeline. The wrapper orchestrates the flow: search → retrieve sources → inject into prompt → stream response with citations. None of that orchestration lives in the raw API.
+
+5. 🛒 Shopify Sidekick
+Wraps OpenAI to give merchants an AI assistant embedded in their store dashboard. The wrapper injects live store data (orders, products, analytics) into every prompt so the model can give contextually relevant business advice.
+
+---
+The Pattern They All Share
+
+User Input
+    ↓
+[Wrapper Layer]  ← business logic, context injection, auth, formatting
+    ↓
+AI API (OpenAI / Anthropic / etc.)
+    ↓
+[Wrapper Layer]  ← parse, transform, error-handle
+    ↓
+User-Facing Output
+
+```
+
+**How it helped:**
+
+```
+
+```
+
+**Challenges:**
+
+```
+
+```
+
+### Phase 2: Setup
+
+#### Prompt #1(setup)
+
+**The backend and frontend are both configured and running without issues.**
+Backend: Python Flask
+Frontend: React + Vite + TailwindCSS
+
+_no need to prompt this_
+
+#### Prompt #2(setup)
+
+**Prompt used:**
+```How can I improve the project structure of a Flask backend and ReactJS (Vite + Tailwind) frontend app that uses the OpenRouter API? Please suggest a scalable folder structure, best practices, and how to organize API calls.```
+
+**AI Response Summary:**
+
+```
+![Best Practices Summary](/best-practices.png)
+```
+
+**How it helped:**
+
+```
+Helped me understand api versioning. 
+```
+
+**Challenges:**
+
+```
+
+```
+### Phase 3 & 4 - Building and Debugging Prompts
+
+#### Prompt #1 (debug)
+Promt 1
+```
+“My AI chat integration isn’t returning responses. Please help me debug it.
+
+- Check how messages are being sent from the frontend.
+- Verify if the backend receives them correctly.
+- Confirm whether the AI model is receiving the messages and generating a response.
+- Identify any possible issues in request/response handling or configuration.”
+
+```
+
+**AI Response Summary:**
+
+```
+
+```
+
+**How it helped:**
+
+```
+
+```
+
+**Challenges:**
+
+```
+
+```
+====================================================
+FILE: ./README.md
+====================================================
+frontend/
+├── public/
+├── src/
+│   ├── api/                     # All API call logic lives here
+│   │   ├── axiosClient.js       # Axios instance with base URL + interceptors
+│   │   ├── journalApi.js        # Journal-specific API calls
+│   │   └── aiApi.js             # AI/OpenRouter-specific API calls
+│   │
+│   ├── components/              # Reusable, dumb UI components
+│   │   ├── ui/                  # Primitives: Button, Input, Modal
+│   │   └── journal/             # Domain-specific: JournalCard, EntryForm
+│   │
+│   ├── pages/                   # Route-level components
+│   │   ├── HomePage.jsx
+│   │   ├── JournalPage.jsx
+│   │   └── SettingsPage.jsx
+│   │
+│   ├── hooks/                   # Custom React hooks
+│   │   ├── useJournal.js        # Data fetching + state for journal
+│   │   └── useAIStream.js       # Handles SSE streaming from OpenRouter
+│   │
+│   ├── context/                 # Global state (Auth, Theme)
+│   │   └── AuthContext.jsx
+│   │
+│   ├── utils/                   # Pure helper functions
+│   │   └── formatDate.js
+│   │
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+│
+├── .env                         # VITE_API_BASE_URL etc.
+├── vite.config.js
+└── tailwind.config.js
+
+
+### AI Prompt Plan
+
+#### Phase 1 - Discovery Prompts:
+
+Prompt 1:
+"What is an API wrapper? What problems does it solve in AI applications?"
+
+Prompt 2:
+"What are the prerequisites for building an AI wrapper for OpenRouter?"
+
+Prompt 3:
+"Show me 5 real-world applications that use API wrappers for AI services"
+
+### Phase 2- Setup Prompts:
+
+Prompt 1 (Setup):
+"Give me step-by-step instructions to set up a project with:
+Backend: Python Flask with OpenRouter API
+Frontend: React + Vite + TailwindCSS
+Include all installation commands and a requirements.txt file"
+
+Prompt 2 (Structure):
+"What's the minimal project structure for a Flask + React app? Show me folder organization."
+
+Prompt 3 (Common Mistakes):
+"What common configuration mistakes should I avoid when setting up Flask with CORS for React?"
+
+
+### Phase 3 & 4 - Building and Debugging Prompts
+Promt 1
+
+“My AI chat integration isn’t returning responses. Please help me debug it.
+
+- Check how messages are being sent from the frontend.
+- Verify if the backend receives them correctly.
+- Confirm whether the AI model is receiving the messages and generating a response.
+- Identify any possible issues in request/response handling or configuration.”
+
+
+====================================================
+FILE: ./components.json
+====================================================
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "radix-nova",
+  "rsc": false,
+  "tsx": false,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/index.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "rtl": false,
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "menuColor": "default",
+  "menuAccent": "subtle",
+  "registries": {}
+}
+
+====================================================
+FILE: ./eslint.config.js
+====================================================
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+])
+
+====================================================
+FILE: ./index.html
+====================================================
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>prompt-powered-toolkit</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+====================================================
+FILE: ./jsconfig.json
+====================================================
+{
+ "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+
+====================================================
+FILE: ./package.json
+====================================================
+{
+  "name": "prompt-powered-toolkit",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "^5.2.8",
+    "@reduxjs/toolkit": "^2.11.2",
+    "@shadcn/ui": "^0.0.4",
+    "axios": "^1.13.6",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^1.7.0",
+    "radix-ui": "^1.4.3",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-hot-toast": "^2.6.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.13.2",
+    "redux-persist": "^6.0.0",
+    "shadcn": "^4.1.0",
+    "tailwind-merge": "^3.5.0",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.0.1"
+  }
+}
+
+====================================================
+FILE: ./postcss.config.js
+====================================================
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+====================================================
+FILE: ./project_dump.txt
+====================================================
+
+====================================================
+FILE: ./src/App.jsx
+====================================================
+// src/App.jsx
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ChatPage from "@/pages/ChatPage";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/chat" replace />} />
+        <Route path="/chat" element={<ChatPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+====================================================
+FILE: ./src/api/axiosClient.js
+====================================================
+// frontend/src/api/axiosClient.js
+import axios from "axios";
+
+const axiosClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000",
+  headers: { "Content-Type": "application/json" },
+});
+
+// Attach auth token to every request
+axiosClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+// Global error handling
+axiosClient.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (error.response?.status === 401) {
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  },
+);
+
+export default axiosClient;
+
+====================================================
+FILE: ./src/components/chat/ChatInput.jsx
+====================================================
+// src/components/chat/ChatInput.jsx
+import { useState, useRef } from "react";
+import { Send, Loader2 } from "lucide-react";
+
+export default function ChatInput({ onSend, disabled }) {
+  const [value, setValue] = useState("");
+  const ref = useRef(null);
+
+  const handleSend = () => {
+    const text = value.trim();
+    if (!text || disabled) return;
+    onSend(text);
+    setValue("");
+    if (ref.current) ref.current.style.height = "auto";
+    ref.current?.focus();
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const handleInput = (e) => {
+    e.target.style.height = "auto";
+    e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+  };
+
+  return (
+    <div className="px-6 py-4 border-t bg-background">
+      <div className="flex items-end gap-3 px-4 py-3 rounded-2xl border bg-muted/30">
+        <textarea
+          ref={ref}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onInput={handleInput}
+          placeholder="Message… (Enter to send, Shift+Enter for new line)"
+          rows={1}
+          disabled={disabled}
+          className="flex-1 resize-none bg-transparent text-foreground placeholder:text-muted-foreground outline-none"
+          style={{ lineHeight: "1.5", minHeight: "24px", maxHeight: "120px" }}
+        />
+
+        <button
+          onClick={handleSend}
+          disabled={disabled || !value.trim()}
+          className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center shrink-0 transition-all disabled:opacity-50 hover:bg-primary/90 active:scale-95"
+          aria-label="Send message"
+        >
+          {disabled ? (
+            <Loader2 size={14} className="animate-spin" />
+          ) : (
+            <Send size={14} />
+          )}
+        </button>
+      </div>
+
+      <p className="text-center text-xs mt-2 text-muted-foreground">
+        AI responses may be inaccurate. Verify important information.
+      </p>
+    </div>
+  );
+}
+
+====================================================
+FILE: ./src/components/chat/MessageBubble.jsx
+====================================================
+// src/components/chat/MessageBubble.jsx
+import { Bot, User } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export default function MessageBubble({ role, content, streaming = false }) {
+  const isUser = role === "user";
+
+  return (
+    <div className={cn("flex gap-3", isUser ? "justify-end" : "justify-start")}>
+      {/* Avatar */}
+      <div
+        className={cn(
+          "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
+          isUser ? "bg-primary order-2" : "bg-secondary order-1",
+        )}
+      >
+        {isUser ? (
+          <User size={14} className="text-primary-foreground" />
+        ) : (
+          <Bot size={14} className="text-secondary-foreground" />
+        )}
+      </div>
+
+      {/* Bubble */}
+      <div
+        className={cn(
+          "max-w-[70%] px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words",
+          isUser
+            ? "bg-primary text-primary-foreground rounded-2xl rounded-tr-sm order-1"
+            : "bg-secondary text-secondary-foreground rounded-2xl rounded-tl-sm order-2",
+        )}
+      >
+        {content}
+        {streaming && (
+          <span className="inline-block w-1.5 h-4 ml-0.5 rounded-sm align-middle animate-pulse bg-current" />
+        )}
+      </div>
+    </div>
+  );
+}
+
+====================================================
+FILE: ./src/components/chat/Sidebar.jsx
+====================================================
+// src/components/chat/Sidebar.jsx
+import { Plus, MessageSquare, Trash2, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export default function Sidebar({
+  conversations,
+  activeId,
+  onNew,
+  onSelect,
+  onDelete,
+}) {
+  return (
+    <aside className="w-64 flex flex-col h-full border-r bg-sidebar">
+      {/* Brand */}
+      <div className="px-4 pt-6 pb-4">
+        <div className="flex items-center gap-2.5 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <Sparkles size={16} className="text-primary-foreground" />
+          </div>
+          <span className="font-semibold text-foreground">AI Toolkit</span>
+        </div>
+
+        {/* New Chat button */}
+        <button
+          onClick={onNew}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-medium text-sm"
+        >
+          <Plus size={16} />
+          New Chat
+        </button>
+      </div>
+
+      {/* Conversation list */}
+      <div className="flex-1 overflow-y-auto px-3 space-y-1 pb-4">
+        <p className="text-xs px-2 mb-2 font-medium uppercase tracking-wider text-muted-foreground">
+          History
+        </p>
+
+        {conversations.map((conv) => {
+          const isActive = conv.id === activeId;
+          return (
+            <div
+              key={conv.id}
+              onClick={() => onSelect(conv.id)}
+              className={cn(
+                "group flex items-center gap-2 px-3 py-2.5 rounded-lg cursor-pointer transition-all",
+                isActive
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                  : "hover:bg-sidebar-accent/50 text-muted-foreground",
+              )}
+            >
+              <MessageSquare size={14} className="shrink-0" />
+              <span className="text-sm flex-1 truncate">{conv.title}</span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(conv.id);
+                }}
+                className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0 rounded p-1 hover:text-destructive"
+              >
+                <Trash2 size={12} />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Footer */}
+      <div className="px-4 py-4 border-t border-sidebar-border">
+        <p className="text-xs text-muted-foreground">Powered by OpenRouter</p>
+      </div>
+    </aside>
+  );
+}
+
+====================================================
+FILE: ./src/components/ui/button.jsx
+====================================================
+import * as React from "react"
+import { cva } from "class-variance-authority";
+import { Slot } from "radix-ui"
+
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
+        outline:
+          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+        ghost:
+          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+        destructive:
+          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default:
+          "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+        xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+        lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
+        icon: "size-8",
+        "icon-xs":
+          "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
+        "icon-sm":
+          "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
+        "icon-lg": "size-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  asChild = false,
+  ...props
+}) {
+  const Comp = asChild ? Slot.Root : "button"
+
+  return (
+    <Comp
+      data-slot="button"
+      data-variant={variant}
+      data-size={size}
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props} />
+  );
+}
+
+export { Button, buttonVariants }
+
+====================================================
+FILE: ./src/hooks/useAIStream.js
+====================================================
+import { useState, useCallback } from "react";
+
+export function useAIStream() {
+  const [output, setOutput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const streamChat = useCallback(async (messages) => {
+    setLoading(true);
+    setOutput("");
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/api/v1/ai/stream`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages }),
+      },
+    );
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      const chunk = decoder.decode(value, { stream: true });
+      setOutput((prev) => prev + chunk);
+    }
+
+    setLoading(false);
+  }, []);
+
+  return { output, loading, streamChat };
+}
+
+====================================================
+FILE: ./src/hooks/useChat.js
+====================================================
+// src/hooks/useChat.js
+import { useState, useCallback, useRef, useEffect } from "react";
+import { useAIStream } from "./useAIStream";
+
+const SYSTEM_PROMPT = {
+  role: "system",
+  content:
+    "You are a helpful, concise AI assistant. Respond in a friendly and informative way.",
+};
+
+let _nextId = 1;
+function createConversation() {
+  return {
+    id: _nextId++,
+    title: "New Chat",
+    messages: [],
+    createdAt: new Date().toISOString(),
+  };
+}
+
+export function useChat() {
+  const [conversations, setConversations] = useState([createConversation()]);
+  const [activeId, setActiveId] = useState(1);
+
+  const { output, loading, streamChat } = useAIStream();
+
+  // Track which conversation a streaming response belongs to
+  const pendingConvId = useRef(null);
+  // Snapshot the output so we can commit it when loading flips to false
+  const lastOutput = useRef("");
+
+  // Keep lastOutput in sync while streaming
+  useEffect(() => {
+    if (loading) lastOutput.current = output;
+  }, [loading, output]);
+
+  // When streaming ends, commit the final message
+  useEffect(() => {
+    if (!loading && pendingConvId.current !== null && lastOutput.current) {
+      const convId = pendingConvId.current;
+      const text = lastOutput.current;
+      pendingConvId.current = null;
+      lastOutput.current = "";
+
+      setConversations((prev) =>
+        prev.map((c) =>
+          c.id === convId
+            ? {
+                ...c,
+                messages: [...c.messages, { role: "assistant", content: text }],
+              }
+            : c,
+        ),
+      );
+    }
+  }, [loading]);
+
+  const activeConversation = conversations.find((c) => c.id === activeId);
+
+  const sendMessage = useCallback(
+    async (text) => {
+      const userMsg = { role: "user", content: text };
+
+      // Optimistically add user message + auto-title first message
+      setConversations((prev) =>
+        prev.map((c) =>
+          c.id === activeId
+            ? {
+                ...c,
+                title:
+                  c.messages.length === 0
+                    ? text.slice(0, 42) + (text.length > 42 ? "…" : "")
+                    : c.title,
+                messages: [...c.messages, userMsg],
+              }
+            : c,
+        ),
+      );
+
+      pendingConvId.current = activeId;
+
+      const conv = conversations.find((c) => c.id === activeId);
+      const history = [...(conv?.messages ?? []), userMsg];
+      await streamChat([SYSTEM_PROMPT, ...history]);
+    },
+    [activeId, conversations, streamChat],
+  );
+
+  const newConversation = useCallback(() => {
+    const conv = createConversation();
+    setConversations((prev) => [conv, ...prev]);
+    setActiveId(conv.id);
+  }, []);
+
+  const selectConversation = useCallback((id) => setActiveId(id), []);
+
+  const deleteConversation = useCallback(
+    (id) => {
+      setConversations((prev) => {
+        const next = prev.filter((c) => c.id !== id);
+        if (next.length === 0) {
+          const fresh = createConversation();
+          setActiveId(fresh.id);
+          return [fresh];
+        }
+        if (id === activeId) {
+          setActiveId(next[0].id);
+        }
+        return next;
+      });
+    },
+    [activeId],
+  );
+
+  return {
+    conversations,
+    activeConversation,
+    activeId,
+    // While streaming, expose the live partial text; null otherwise
+    streamingOutput: loading ? output : null,
+    isStreaming: loading,
+    sendMessage,
+    newConversation,
+    selectConversation,
+    deleteConversation,
+  };
+}
+
+====================================================
+FILE: ./src/index.css
+====================================================
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Black & White Theme */
+    --background: #ffffff;
+    --foreground: #333333;
+
+    --card: #ffffff;
+    --card-foreground: #333333;
+
+    --popover: #ffffff;
+    --popover-foreground: #333333;
+
+    --primary: #333333;
+    --primary-foreground: #f4f4f4;
+
+    --secondary: #f4f4f4;
+    --secondary-foreground: #333333;
+
+    --muted: #eaeaea;
+    --muted-foreground: #848484;
+
+    --accent: #c1c1c1;
+    --accent-foreground: #333333;
+
+    --destructive: #ff4444;
+    --destructive-foreground: #ffffff;
+
+    --border: #eaeaea;
+    --input: #f4f4f4;
+    --ring: #c1c1c1;
+
+    --radius: 0.75rem;
+
+    /* Sidebar */
+    --sidebar: #f4f4f4;
+    --sidebar-foreground: #333333;
+    --sidebar-primary: #333333;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #eaeaea;
+    --sidebar-accent-foreground: #333333;
+    --sidebar-border: #eaeaea;
+    --sidebar-ring: #c1c1c1;
+  }
+
+  .dark {
+    --background: #333333;
+    --foreground: #f4f4f4;
+
+    --card: #333333;
+    --card-foreground: #f4f4f4;
+
+    --popover: #333333;
+    --popover-foreground: #f4f4f4;
+
+    --primary: #f4f4f4;
+    --primary-foreground: #333333;
+
+    --secondary: #848484;
+    --secondary-foreground: #f4f4f4;
+
+    --muted: #848484;
+    --muted-foreground: #c1c1c1;
+
+    --accent: #c1c1c1;
+    --accent-foreground: #333333;
+
+    --border: #848484;
+    --input: #848484;
+    --ring: #c1c1c1;
+
+    --sidebar: #2a2a2a;
+    --sidebar-foreground: #f4f4f4;
+    --sidebar-primary: #f4f4f4;
+    --sidebar-primary-foreground: #333333;
+    --sidebar-accent: #3a3a3a;
+    --sidebar-accent-foreground: #f4f4f4;
+    --sidebar-border: #3a3a3a;
+    --sidebar-ring: #c1c1c1;
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans, "Geist Variable", sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    height: 100%;
+  }
+
+  #root {
+    height: 100vh;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ring);
+}
+
+====================================================
+FILE: ./src/lib/utils.js
+====================================================
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
+====================================================
+FILE: ./src/main.jsx
+====================================================
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+====================================================
+FILE: ./src/pages/ChatPage.jsx
+====================================================
+// src/pages/ChatPage.jsx
+import { useRef, useEffect } from "react";
+import { Bot } from "lucide-react";
+import { useChat } from "@/hooks/useChat";
+import Sidebar from "@/components/chat/Sidebar";
+import MessageBubble from "@/components/chat/MessageBubble";
+import ChatInput from "@/components/chat/ChatInput";
+
+export default function ChatPage() {
+  const {
+    conversations,
+    activeConversation,
+    activeId,
+    streamingOutput,
+    isStreaming,
+    sendMessage,
+    newConversation,
+    selectConversation,
+    deleteConversation,
+  } = useChat();
+
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [activeConversation?.messages?.length, streamingOutput]);
+
+  const messages = activeConversation?.messages ?? [];
+  const isEmpty = messages.length === 0 && !isStreaming;
+
+  return (
+    <div className="flex h-full bg-background">
+      <Sidebar
+        conversations={conversations}
+        activeId={activeId}
+        onNew={newConversation}
+        onSelect={selectConversation}
+        onDelete={deleteConversation}
+      />
+
+      <main className="flex flex-col flex-1 min-w-0 overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center gap-3 px-6 py-4 border-b bg-background shrink-0">
+          <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+            <Bot size={16} className="text-secondary-foreground" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-foreground truncate">
+              {activeConversation?.title ?? "New Chat"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {isStreaming ? (
+                <span className="text-primary">Typing…</span>
+              ) : (
+                "OpenRouter · AI"
+              )}
+            </p>
+          </div>
+        </div>
+
+        {/* Message list */}
+        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+          {isEmpty && (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+                <Bot size={30} className="text-primary" />
+              </div>
+              <h2 className="text-xl font-semibold text-foreground mb-2">
+                How can I help?
+              </h2>
+              <p className="text-sm text-muted-foreground max-w-md">
+                Ask anything. Start a conversation below.
+              </p>
+            </div>
+          )}
+
+          {messages.map((msg, i) => (
+            <MessageBubble key={i} role={msg.role} content={msg.content} />
+          ))}
+
+          {isStreaming && streamingOutput && (
+            <MessageBubble
+              role="assistant"
+              content={streamingOutput}
+              streaming
+            />
+          )}
+
+          <div ref={bottomRef} />
+        </div>
+
+        <ChatInput onSend={sendMessage} disabled={isStreaming} />
+      </main>
+    </div>
+  );
+}
+
+====================================================
+FILE: ./tailwind.config.js
+====================================================
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: ["class"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
+        },
+        destructive: {
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
+        sidebar: {
+          DEFAULT: "var(--sidebar)",
+          foreground: "var(--sidebar-foreground)",
+          primary: "var(--sidebar-primary)",
+          "primary-foreground": "var(--sidebar-primary-foreground)",
+          accent: "var(--sidebar-accent)",
+          "accent-foreground": "var(--sidebar-accent-foreground)",
+          border: "var(--sidebar-border)",
+          ring: "var(--sidebar-ring)",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+    },
+  },
+  plugins: [],
+};
+
+====================================================
+FILE: ./vite.config.js
+====================================================
+import path from "path";
+// import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react(),],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+});
