@@ -94,6 +94,6 @@ npm install tailwindcss @tailwindcss/vite axios lucide-react react-router-dom
 
 ## Live Demo
 
-👉 [Try the App](https://my-ai-chat-app.vercel.app)
+👉 [Try the App](https://ai-wrapper-frontend-zrf5.onrender.com)
     ![AI Works](/public/aiworks.png)
 
