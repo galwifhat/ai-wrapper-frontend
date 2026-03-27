@@ -1,8 +1,14 @@
 // frontend/src/api/axiosClient.js
 import axios from "axios";
 
+const baseURL = import.meta.env.VITE_API_BASE_URL
+  ? import.meta.env.VITE_API_BASE_URL
+  : import.meta.env.MODE === "development"
+    ? "http://127.0.0.1:5000"
+    : "https://your-production-api.com";
+
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000",
+  baseURL,
   headers: { "Content-Type": "application/json" },
 });
 
