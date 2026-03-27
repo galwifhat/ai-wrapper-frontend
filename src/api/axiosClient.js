@@ -5,7 +5,7 @@ const baseURL = import.meta.env.VITE_API_BASE_URL
   ? import.meta.env.VITE_API_BASE_URL
   : import.meta.env.MODE === "development"
     ? "http://127.0.0.1:5000"
-    : "https://your-production-api.com";
+    : "https://ai-wrapperz.onrender.com";
 
 const axiosClient = axios.create({
   baseURL,
