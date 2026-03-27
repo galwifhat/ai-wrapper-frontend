@@ -91,7 +91,7 @@ npm install tailwindcss @tailwindcss/vite axios lucide-react react-router-dom
 - [Read the full AI Toolkit](./docs/AI_Toolkit_Guide_by_Ruth_Iguta.pdf)
 - [Prompts](./docs/AIPromptJournal.md)
 
+
 ## Live Demo
 
 👉 [Try the App](https://my-ai-chat-app.vercel.app)
-👉 [Image of AI interface](/aiworks.pdf)
